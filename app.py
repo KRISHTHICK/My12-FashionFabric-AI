@@ -5,52 +5,47 @@ from torchvision import models
 from PIL import Image
 import os
 
-# ✅ This must be the first Streamlit command
+# ✅ Must be the first Streamlit command
 st.set_page_config(page_title="🧵 FashionFabric AI", layout="wide")
 
+# App title
 st.title("🧵 FashionFabric AI - Fabric & Quality Analyzer")
+st.markdown("Upload a fabric image to analyze its texture, quality, and pattern.")
 
-
-
-# Load Model
+# Load pretrained model
 model = models.resnet18(pretrained=True)
 model.eval()
 
-fabric_classes = ["cotton", "denim", "silk", "wool", "leather"]
+# Transform for image
+transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor()
+])
 
-def predict_fabric(image):
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-    ])
-    img_tensor = transform(image).unsqueeze(0)
-    with torch.no_grad():
-        output = model(img_tensor)
-        pred_idx = torch.argmax(output, 1).item()
-        return fabric_classes[pred_idx % len(fabric_classes)]  # Simulate mapping
-
-def suggest_use(fabric):
-    suggestions = {
-        "cotton": "Perfect for summer and casual wear.",
-        "denim": "Ideal for jeans and casual jackets.",
-        "silk": "Best for formal and party wear.",
-        "wool": "Great for winter wear and sweaters.",
-        "leather": "Perfect for jackets and stylish accessories."
-    }
-    return suggestions.get(fabric, "Explore creative fashion uses!")
-
+# Upload image
 uploaded_image = st.file_uploader("📸 Upload Fabric Image", type=["jpg", "jpeg", "png"])
 
+# Function to make prediction (simulated labels)
+def predict_quality(img):
+    labels = ["Silk - Premium", "Cotton - Standard", "Denim - Durable", "Linen - Lightweight", "Wool - Warm"]
+    outputs = model(img.unsqueeze(0))
+    _, predicted = torch.max(outputs, 1)
+    return labels[predicted.item() % len(labels)]
+
+# Display and process
 if uploaded_image:
     image = Image.open(uploaded_image).convert("RGB")
-    st.image(image, caption="Uploaded Fabric", use_container_width=True)
+    st.image(image, caption="Uploaded Fabric Image", use_column_width=True)
+    
+    with st.spinner("🧠 Analyzing Fabric..."):
+        tensor = transform(image)
+        result = predict_quality(tensor)
+    
+    st.success(f"🧵 Detected Fabric Type & Quality: **{result}**")
 
-    with st.spinner("🔍 Analyzing Fabric..."):
-        fabric = predict_fabric(image)
-        suggestion = suggest_use(fabric)
-
-    st.subheader("🧶 Predicted Fabric Type")
-    st.success(fabric.capitalize())
-
-    st.subheader("💡 Suggested Use")
-    st.info(suggestion)
+    # Generate captions, hashtags
+    st.subheader("✍️ Auto-Generated Content")
+    caption = f"This {result.split('-')[0].strip()} fabric gives an elegant and stylish vibe. Perfect for a modern look!"
+    hashtags = "#fashion #fabricanalysis #style #AIinFashion"
+    st.text_area("📄 Caption:", caption, height=100)
+    st.text_area("🏷️ Hashtags:", hashtags, height=50)
