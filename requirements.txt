@@ -1,0 +1,8 @@
+streamlit
+torch
+torchvision
+Pillow
+
+
+#pip install -r requirements.txt
+#streamlit run app.py
