@@ -1,9 +1,3 @@
-
----
-
-### 📄 `app.py`
-
-```python
 import streamlit as st
 import torch
 import torchvision.transforms as transforms
@@ -11,10 +5,11 @@ from torchvision import models
 from PIL import Image
 import os
 
+# ✅ This must be the first Streamlit command
 st.set_page_config(page_title="🧵 FashionFabric AI", layout="wide")
+
 st.title("🧵 FashionFabric AI - Fabric & Quality Analyzer")
 
-# ... rest of the code
 
 
 # Load Model
