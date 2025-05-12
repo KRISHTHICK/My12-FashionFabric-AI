@@ -48,4 +48,4 @@ if uploaded_image:
     caption = f"This {result.split('-')[0].strip()} fabric gives an elegant and stylish vibe. Perfect for a modern look!"
     hashtags = "#fashion #fabricanalysis #style #AIinFashion"
     st.text_area("📄 Caption:", caption, height=100)
-    st.text_area("🏷️ Hashtags:", hashtags, height=50)
+    st.text_area("🏷️ Hashtags:", hashtags, height=80)
