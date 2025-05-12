@@ -1,0 +1,6 @@
+FashionFabric-AI/
+├── app.py
+├── requirements.txt
+├── sample_data/
+│   └── cotton.jpg
+└── README.md
