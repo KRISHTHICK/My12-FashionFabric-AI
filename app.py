@@ -14,6 +14,9 @@ import os
 st.set_page_config(page_title="🧵 FashionFabric AI", layout="wide")
 st.title("🧵 FashionFabric AI - Fabric & Quality Analyzer")
 
+# ... rest of the code
+
+
 # Load Model
 model = models.resnet18(pretrained=True)
 model.eval()
